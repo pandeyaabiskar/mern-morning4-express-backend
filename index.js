@@ -3,10 +3,14 @@ const PORT = 4000;
 const productRouter = require('./routes/productRoutes');
 const hbs = require('hbs');
 const productData = require('./data/products.json')
-const {logData} = require('./middlewares/logger')
+const { logData } = require('./middlewares/logger')
+require('dotenv').config();
+const connectDatabase = require('./database/connection')
 
 //Creating a server
 const app = express();
+//Connect Database
+connectDatabase();
 
 //Setting view engine
 app.set('view engine', 'hbs');
