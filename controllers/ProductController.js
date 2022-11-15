@@ -1,39 +1,64 @@
-const returnAllProducts = (req, res) => {
-  const { category } = req.query;
-  if (category) {
-    const filteredProducts = productData.filter((product) => {
-      return product.category === category;
-    });
-    if (filteredProducts.length !== 0) {
-      res.json(filteredProducts);
-    } else {
-      res.send("Sorry no product in the category");
-    }
-  } else {
+const ProductModel = require("../models/ProductModel");
+
+const returnAllProducts = async (req, res) => {
+  // const { category } = req.query;
+  // if (category) {
+  //   const filteredProducts = productData.filter((product) => {
+  //     return product.category === category;
+  //   });
+  //   if (filteredProducts.length !== 0) {
+  //     res.json(filteredProducts);
+  //   } else {
+  //     res.send("Sorry no product in the category");
+  //   }
+  // } else {
+  //   res.json(productData);
+  // }
+  try {
+    const productData = await ProductModel.find();
     res.json(productData);
+  } catch (e) {
+    res.send("Error occured");
   }
 };
 
-const returnSingleProduct = (req, res) => {
+const returnSingleProduct = async (req, res) => {
   const { productID } = req.params;
-  if (productID <= productData.length) {
-    res.json(productData[productID - 1]);
-  } else {
-    res.send("Index doesn't exist");
+  try {
+    const productData = await ProductModel.findById(productID);
+    res.json(productData);
+  } catch (e) {
+    res.send("Error occured");
   }
 };
 
-const createProduct = (req, res) => {
-  console.log(req.body);
-  res.send("POST");
+const createProduct = async (req, res) => {
+  try {
+    const product = await ProductModel.create(req.body);
+    res.json(product)
+  } catch (e) {
+    res.send("Error Occured")
+  }
 };
 
-const updateProduct = (req, res) => {
-  res.send("PATCH");
+const updateProduct = async (req, res) => {
+  const { productID } = req.params;
+  try {
+    const product = await ProductModel.findByIdAndUpdate(productID, req.body)
+    res.json(product)
+  } catch (e) {
+    res.send("Error Occured")
+  }
 };
 
-const deleteProduct = (req, res) => {
-  res.send("DELETE");
+const deleteProduct = async (req, res) => {
+  const { productID } = req.params;
+  try {
+    const product = await ProductModel.findByIdAndDelete(productID)
+    res.json(product)
+  } catch (e) {
+    res.send("Error Occured")
+  }
 };
 
 module.exports = {
