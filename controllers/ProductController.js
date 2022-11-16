@@ -37,6 +37,7 @@ const createProduct = async (req, res) => {
     const product = await ProductModel.create(req.body);
     res.json(product)
   } catch (e) {
+    console.log(e)
     res.send("Error Occured")
   }
 };
@@ -44,7 +45,7 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   const { productID } = req.params;
   try {
-    const product = await ProductModel.findByIdAndUpdate(productID, req.body)
+    const product = await ProductModel.findByIdAndUpdate(productID, req.body, {new:true})
     res.json(product)
   } catch (e) {
     res.send("Error Occured")
